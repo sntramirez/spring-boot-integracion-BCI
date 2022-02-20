@@ -1,5 +1,6 @@
 package com.integracion.crud.dto;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +32,7 @@ public class UsuarioRequest {
 
 	private Set<String> roles = new HashSet<>();
 
-	private Collection<TelefonoRequest> phones;
+	private Collection<TelefonoRequest> phones = new ArrayList<TelefonoRequest>();
 
 	public String getName() {
 		return name;

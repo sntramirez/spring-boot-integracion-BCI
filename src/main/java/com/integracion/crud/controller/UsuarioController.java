@@ -98,9 +98,10 @@ public class UsuarioController {
 				userUpdate.setToken(jwt);
 				usuarioService.save(userUpdate);
 
-				result = ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponse);
+				result = ResponseEntity.status(HttpStatus.OK).body(usuarioResponse);
 
 			} catch (NoSuchElementException | InvalidDataAccessApiUsageException c) {
+				c.printStackTrace();
 				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.interno"),
 						env.getProperty("mensaje.error.interno"), env.getProperty("mensaje.campo.interno")));
 				result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MensajesResponse(mensaje));
@@ -143,7 +144,7 @@ public class UsuarioController {
 				userUpdate.setToken(jwt);
 				usuarioService.save(userUpdate);
 
-				result = ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponse);
+				result = ResponseEntity.status(HttpStatus.OK).body(usuarioResponse);
 
 			} catch (NoSuchElementException | InvalidDataAccessApiUsageException | DataIntegrityViolationException c) {
 				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.interno"),
