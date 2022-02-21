@@ -5,7 +5,7 @@ Implementación de una API RESTful para la creación de usuarios, para el desarr
 https://app.swaggerhub.com/apis-docs/snt.ramirez/integracion-BCI/1.0.0
 
 Diagrama de la solución
-![Home Page](https://github.com/sntramirez/spring-boot-integracion-BCI/blob/main/src/main/resources/static/documentos/diagrama.pdf)
+https://github.com/sntramirez/spring-boot-integracion-BCI/blob/main/src/main/resources/static/documentos/diagrama.pdf
 
 # Screenshots configuraciones iniciales
 1. Ingresamos a la consola de la base de datos H2
@@ -95,9 +95,8 @@ Response
 
 Authorization
 
-```json
 Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYWFhYWFhYUBkb21pbmlvLmNsIiwiaWF0IjoxNjQ1NDExNjk3LCJleHAiOjE2NDU0NDc2OTd9.TwQYfE9vCOdLi65ihuQpUYGAsFwxNrB8pGhWHWfShcYnsYRQ-r-yOnxvu0H3UzE8yQjoObnWYfrgyfvfSH7vew
-```
+
 Request
 
 ```json
@@ -130,10 +129,8 @@ Response
 4. validación servicio /usuario/lista
 
 Authorization
-
-```json
 Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhYWFhYWFhYUBkb21pbmlvLmNsIiwiaWF0IjoxNjQ1NDExNjk3LCJleHAiOjE2NDU0NDc2OTd9.TwQYfE9vCOdLi65ihuQpUYGAsFwxNrB8pGhWHWfShcYnsYRQ-r-yOnxvu0H3UzE8yQjoObnWYfrgyfvfSH7vew
-```
+
 Request
 
 Response
