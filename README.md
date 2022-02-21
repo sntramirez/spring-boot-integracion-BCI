@@ -12,8 +12,11 @@ https://github.com/sntramirez/spring-boot-integracion-BCI/blob/main/src/main/res
 ![View Post Page](https://github.com/sntramirez/spring-boot-integracion-BCI/blob/main/src/main/resources/static/images/consoleH2.jpg)
 
 2. Copiamos script de la ubicación
+
+```json
 INSERT INTO TB_ROLES VALUES (1,'ROLE_ADMIN');
 INSERT INTO TB_ROLES VALUES (2,'ROLE_USER');
+```
 ![Home Page](https://github.com/sntramirez/spring-boot-integracion-BCI/blob/main/src/main/resources/static/images/lugarInsert.jpg)
 
 
