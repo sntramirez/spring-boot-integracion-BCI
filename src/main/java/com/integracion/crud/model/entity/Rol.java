@@ -1,5 +1,7 @@
 package com.integracion.crud.model.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -7,7 +9,9 @@ import com.integracion.crud.security.enums.RolNombre;
 
 @Entity
 @Table(name = "TB_ROLES")
-public class Rol {
+public class Rol implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

@@ -1,40 +1,39 @@
 package com.integracion.crud.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 
 public class UsuarioListaResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String email;
-	private Date created;
-	private Date modified;
-	private String last_login;
+	private Instant created;
+	private Instant modified;
+	private Instant last_login;
 	private boolean isactive;
 
-
-	public Date getCreated() {
+	public Instant getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	public void setCreated(Instant created) {
 		this.created = created;
 	}
 
-	public Date getModified() {
+	public Instant getModified() {
 		return modified;
 	}
 
-	public void setModified(Date modified) {
+	public void setModified(Instant modified) {
 		this.modified = modified;
 	}
 
-	public String getLast_login() {
+	public Instant getLast_login() {
 		return last_login;
 	}
 
-	public void setLast_login(String last_login) {
+	public void setLast_login(Instant last_login) {
 		this.last_login = last_login;
 	}
 

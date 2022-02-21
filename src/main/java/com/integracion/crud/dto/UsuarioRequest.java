@@ -1,5 +1,6 @@
 package com.integracion.crud.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,7 +13,9 @@ import javax.validation.constraints.Size;
 
 import com.integracion.crud.util.Constants;
 
-public class UsuarioRequest {
+public class UsuarioRequest implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@NotNull
 	@NotBlank

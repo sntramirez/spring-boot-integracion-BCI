@@ -17,8 +17,8 @@ public interface UsuarioMapper {
 	UsuarioMapper INSTANCE = Mappers.getMapper(UsuarioMapper.class);
 
 	@Mapping(target = "id", source = "usuario.id")
-	@Mapping(target = "created", source = "usuario.created", dateFormat = "dd-MM-yyyy HH:mm")
-	@Mapping(target = "modified", source = "usuario.modified", dateFormat = "dd-MM-yyyy HH:mm")
+	@Mapping(target = "created", source = "usuario.created", dateFormat = "dd-MM-YYYY")
+	@Mapping(target = "modified", source = "usuario.modified", dateFormat = "dd-MM-YYYY")
 	@Mapping(target = "last_login", source = "usuario.last_login")
 	@Mapping(target = "token", source = "usuario.token")
 	@Mapping(target = "isactive", source = "usuario.isactive")
@@ -26,8 +26,8 @@ public interface UsuarioMapper {
 	
 	
 	@Mapping(target = "email", source = "usuario.email")
-	@Mapping(target = "created", source = "usuario.created", dateFormat = "dd-MM-yyyy HH:mm")
-	@Mapping(target = "modified", source = "usuario.modified", dateFormat = "dd-MM-yyyy HH:mm")
+	@Mapping(target = "created", source = "usuario.created", dateFormat = "dd-MM-YYYY")
+	@Mapping(target = "modified", source = "usuario.modified", dateFormat = "dd-MM-YYYY")
 	@Mapping(target = "last_login", source = "usuario.last_login")
 	@Mapping(target = "isactive", source = "usuario.isactive")
 	UsuarioListaResponse mapListaToDto(Usuario usuario);
@@ -60,6 +60,9 @@ public interface UsuarioMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "rolNombre", expression = "java(\"admin\".contains(roles)?com.integracion.crud.security.enums.RolNombre.ROLE_ADMIN:com.integracion.crud.security.enums.RolNombre.ROLE_USER)")
 	Rol mapRolToEntity(String roles);
+	
+	
+	
 
 
 }
