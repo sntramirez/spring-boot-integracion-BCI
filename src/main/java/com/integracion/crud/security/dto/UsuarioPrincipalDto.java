@@ -72,7 +72,5 @@ public class UsuarioPrincipalDto implements UserDetails {
 		this.password = password;
 	}
 
-
-    
     
 }

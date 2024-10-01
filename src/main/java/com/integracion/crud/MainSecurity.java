@@ -23,30 +23,29 @@ import com.integracion.crud.security.service.UserDetailsServiceImpl;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MainSecurity extends WebSecurityConfigurerAdapter {
 
-	
-	@Autowired
+
+    @Autowired
     UserDetailsServiceImpl userDetailsService;
-	
+
     @Autowired
     JwtEntryPoint jwtEntryPoint;
-    
+
     @Bean
-    public JwtTokenFilter jwtTokenFilter(){
+    public JwtTokenFilter jwtTokenFilter() {
         return new JwtTokenFilter();
     }
-    
-	@Bean
-	public static PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
+
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
-	
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -58,24 +57,24 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		
-		  http.cors().and().csrf().disable()
-          .headers().frameOptions().disable()
-          .and()
-          .authorizeRequests()
-          .antMatchers("/api/usuario/nuevo").permitAll()
-          .antMatchers("/api/usuario/login").permitAll()
-          .antMatchers("/h2-console/**").permitAll()
-          .anyRequest().authenticated()
-          .and()
-          .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
-          .and()
-          .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-          http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-          
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
 
-	}
+        http.cors().and().csrf().disable()
+                .headers().frameOptions().disable()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/usuario/nuevo").permitAll()
+                .antMatchers("/api/usuario/login").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+
+    }
 
 }

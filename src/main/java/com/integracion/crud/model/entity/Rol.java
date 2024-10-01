@@ -41,4 +41,5 @@ public class Rol implements Serializable {
 	public void setRolNombre(RolNombre rolNombre) {
 		this.rolNombre = rolNombre;
 	}
+
 }

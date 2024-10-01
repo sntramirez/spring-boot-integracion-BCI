@@ -3,8 +3,8 @@ package com.integracion.crud.dto;
 import java.io.Serializable;
 
 public class TelefonoRequest implements Serializable {
-
 	private static final long serialVersionUID = 1L;
+
 	private String number;
 	private String citycode;
 	private String contrycode;

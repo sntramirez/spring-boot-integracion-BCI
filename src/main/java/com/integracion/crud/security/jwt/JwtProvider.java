@@ -26,8 +26,8 @@ public class JwtProvider {
     @Value("${jwt.expiration}")
     private int expiration;
 
-    public String generateToken(Authentication authentication){
-    	UsuarioPrincipalDto usuarioPrincipal = (UsuarioPrincipalDto) authentication.getPrincipal();
+    public String generateToken(Authentication authentication) {
+        UsuarioPrincipalDto usuarioPrincipal = (UsuarioPrincipalDto) authentication.getPrincipal();
         return Jwts.builder().setSubject(usuarioPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expiration * 1000))
@@ -35,23 +35,23 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String getNombreUsuarioFromToken(String token){
+    public String getNombreUsuarioFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
-        }catch (MalformedJwtException e){
-            
-        }catch (UnsupportedJwtException e){
-    
-        }catch (ExpiredJwtException e){
+        } catch (MalformedJwtException e) {
 
-        }catch (IllegalArgumentException e){
+        } catch (UnsupportedJwtException e) {
 
-        }catch (SignatureException e){
+        } catch (ExpiredJwtException e) {
+
+        } catch (IllegalArgumentException e) {
+
+        } catch (SignatureException e) {
 
         }
         return false;

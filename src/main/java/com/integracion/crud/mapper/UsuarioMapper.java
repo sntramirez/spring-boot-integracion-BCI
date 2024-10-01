@@ -60,9 +60,5 @@ public interface UsuarioMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "rolNombre", expression = "java(\"admin\".contains(roles)?com.integracion.crud.security.enums.RolNombre.ROLE_ADMIN:com.integracion.crud.security.enums.RolNombre.ROLE_USER)")
 	Rol mapRolToEntity(String roles);
-	
-	
-	
-
 
 }

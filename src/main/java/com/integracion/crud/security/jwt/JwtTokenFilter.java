@@ -24,48 +24,48 @@ import com.integracion.crud.security.service.UserDetailsServiceImpl;
 @PropertySource("classpath:mensajes.properties")
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-	@Autowired
-	Environment env;
+    @Autowired
+    Environment env;
 
-	@Autowired
-	JwtProvider jwtProvider;
+    @Autowired
+    JwtProvider jwtProvider;
 
-	@Autowired
-	UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
-			throws ServletException, IOException {
-		try {
-			String token = getToken(req);
-			if (token != null && jwtProvider.validateToken(token)) {
-				String nombreUsuario = jwtProvider.getNombreUsuarioFromToken(token);
-				UserDetails userDetails = userDetailsService.loadUserByUsername(nombreUsuario);
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
+            throws ServletException, IOException {
+        try {
+            String token = getToken(req);
+            if (token != null && jwtProvider.validateToken(token)) {
+                String nombreUsuario = jwtProvider.getNombreUsuarioFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(nombreUsuario);
 
-				UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null,
-						userDetails.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(auth);
-			}
-		} catch (Exception e) {
-			List<MensajeResponse> mensaje = new ArrayList<>();
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null,
+                        userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        } catch (Exception e) {
+            List<MensajeResponse> mensaje = new ArrayList<>();
 
-			mensaje.add(new MensajeResponse(env.getProperty("codigo.error.no.autorizado"),
-					env.getProperty("mensaje.error.no.autorizado"), env.getProperty("mensaje.campo.no.autorizado")));
+            mensaje.add(new MensajeResponse(env.getProperty("codigo.error.no.autorizado"),
+                    env.getProperty("mensaje.error.no.autorizado"), env.getProperty("mensaje.campo.no.autorizado")));
 
-			res.getWriter().write(new ObjectMapper().writeValueAsString(mensaje));
-			res.setStatus(401);
-			res.setContentType("application/json");
+            res.getWriter().write(new ObjectMapper().writeValueAsString(mensaje));
+            res.setStatus(401);
+            res.setContentType("application/json");
 
-			return;
+            return;
 
-		}
-		filterChain.doFilter(req, res);
-	}
+        }
+        filterChain.doFilter(req, res);
+    }
 
-	private String getToken(HttpServletRequest request) {
-		String header = request.getHeader("Authorization");
-		if (header != null && header.startsWith("Bearer"))
-			return header.replace("Bearer ", "");
-		return null;
-	}
+    private String getToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer"))
+            return header.replace("Bearer ", "");
+        return null;
+    }
 }

@@ -151,5 +151,4 @@ public class Usuario implements Serializable {
 	public void setRoles(Collection<Rol> roles) {
 		this.roles = roles;
 	}
-
 }

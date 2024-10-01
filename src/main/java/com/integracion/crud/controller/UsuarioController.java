@@ -48,174 +48,175 @@ import com.integracion.crud.security.jwt.JwtProvider;
 @PropertySource("classpath:mensajes.properties")
 public class UsuarioController {
 
-	@Autowired
-	Environment env;
+    @Autowired
+    Environment env;
 
-	@Autowired
-	UsuarioService usuarioService;
+    @Autowired
+    UsuarioService usuarioService;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
-	@Autowired
-	JwtProvider jwtProvider;
+    @Autowired
+    JwtProvider jwtProvider;
 
-	@Autowired
-	AuthenticationManager authenticationManager;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
-	@PostMapping("/nuevo")
-	public ResponseEntity<?> nuevo(@Valid @RequestBody UsuarioRequest nuevoUsuario, BindingResult bindingResult) {
+    @PostMapping("/nuevo")
+    public ResponseEntity<?> nuevo(@Valid @RequestBody UsuarioRequest nuevoUsuario, BindingResult bindingResult) {
 
-		ResponseEntity<?> result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		List<MensajeResponse> mensaje = new ArrayList<>();
-		if (bindingResult.hasErrors()) {
+        ResponseEntity<?> result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        List<MensajeResponse> mensaje = new ArrayList<>();
+        if (bindingResult.hasErrors()) {
 
-			bindingResult.getAllErrors().forEach((error) -> {
-				FieldError fieldError = (FieldError) error;
-				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.campo"), fieldError.getDefaultMessage(),
-						fieldError.getField()));
-			});
-			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
+            bindingResult.getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                mensaje.add(new MensajeResponse(env.getProperty("codigo.error.campo"), fieldError.getDefaultMessage(),
+                        fieldError.getField()));
+            });
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
 
-		} else if (usuarioService.existsByEmail(nuevoUsuario.getEmail())) {
-			mensaje.add(new MensajeResponse(env.getProperty("codigo.error.dato"), env.getProperty("mensaje.error.mail"),
-					env.getProperty("mensaje.campo.mail")));
-			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
-		} else {
-			try {
+        } else if (usuarioService.existsByEmail(nuevoUsuario.getEmail())) {
+            mensaje.add(new MensajeResponse(env.getProperty("codigo.error.dato"), env.getProperty("mensaje.error.mail"),
+                    env.getProperty("mensaje.campo.mail")));
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
+        } else {
+            try {
 
-				UsuarioResponse usuarioResponse = usuarioService.registarUsuario(nuevoUsuario);
+                UsuarioResponse usuarioResponse = usuarioService.registarUsuario(nuevoUsuario);
 
-				Authentication authentication = authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(nuevoUsuario.getEmail(), nuevoUsuario.getPassword()));
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(nuevoUsuario.getEmail(), nuevoUsuario.getPassword()));
 
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-				String jwt = jwtProvider.generateToken(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwt = jwtProvider.generateToken(authentication);
 
-				usuarioResponse.setToken(jwt);
+                usuarioResponse.setToken(jwt);
 
-				Usuario userUpdate = usuarioService.getById(usuarioResponse.getId());
-				userUpdate.setToken(jwt);
-				usuarioService.save(userUpdate);
+                Usuario userUpdate = usuarioService.getById(usuarioResponse.getId());
+                userUpdate.setToken(jwt);
+                usuarioService.save(userUpdate);
 
-				result = ResponseEntity.status(HttpStatus.OK).body(usuarioResponse);
+                result = ResponseEntity.status(HttpStatus.OK).body(usuarioResponse);
 
-			} catch (NoSuchElementException | InvalidDataAccessApiUsageException c) {
-				c.printStackTrace();
-				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.interno"),
-						env.getProperty("mensaje.error.interno"), env.getProperty("mensaje.campo.interno")));
-				result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MensajesResponse(mensaje));
-			}
+            } catch (NoSuchElementException | InvalidDataAccessApiUsageException c) {
+                c.printStackTrace();
+                mensaje.add(new MensajeResponse(env.getProperty("codigo.error.interno"),
+                        env.getProperty("mensaje.error.interno"), env.getProperty("mensaje.campo.interno")));
+                result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MensajesResponse(mensaje));
+            }
 
-		}
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	@PostMapping("/actualizar")
-	public ResponseEntity<?> actualizar(@Valid @RequestBody UsuarioRequest nuevoUsuario, BindingResult bindingResult) {
+    @PostMapping("/actualizar")
+    public ResponseEntity<?> actualizar(@Valid @RequestBody UsuarioRequest nuevoUsuario, BindingResult bindingResult) {
 
-		ResponseEntity<?> result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		List<MensajeResponse> mensaje = new ArrayList<>();
-		if (bindingResult.hasErrors()) {
+        ResponseEntity<?> result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        List<MensajeResponse> mensaje = new ArrayList<>();
+        if (bindingResult.hasErrors()) {
 
-			bindingResult.getAllErrors().forEach((error) -> {
-				FieldError fieldError = (FieldError) error;
-				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.campo"), fieldError.getDefaultMessage(),
-						fieldError.getField()));
-			});
-			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
+            bindingResult.getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                mensaje.add(new MensajeResponse(env.getProperty("codigo.error.campo"), fieldError.getDefaultMessage(),
+                        fieldError.getField()));
+            });
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
 
-		} else if (usuarioService.existsByEmail(nuevoUsuario.getEmail())) {
+        } else if (usuarioService.existsByEmail(nuevoUsuario.getEmail())) {
 
-			try {
+            try {
 
-				UsuarioResponse usuarioResponse = usuarioService.actulizarUsuario(nuevoUsuario);
+                UsuarioResponse usuarioResponse = usuarioService.actulizarUsuario(nuevoUsuario);
 
-				Authentication authentication = authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(nuevoUsuario.getEmail(), nuevoUsuario.getPassword()));
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(nuevoUsuario.getEmail(), nuevoUsuario.getPassword()));
 
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-				String jwt = jwtProvider.generateToken(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwt = jwtProvider.generateToken(authentication);
 
-				usuarioResponse.setToken(jwt);
+                usuarioResponse.setToken(jwt);
 
-				Usuario userUpdate = usuarioService.getById(usuarioResponse.getId());
-				userUpdate.setToken(jwt);
-				usuarioService.save(userUpdate);
+                Usuario userUpdate = usuarioService.getById(usuarioResponse.getId());
+                userUpdate.setToken(jwt);
+                usuarioService.save(userUpdate);
 
-				result = ResponseEntity.status(HttpStatus.OK).body(usuarioResponse);
+                result = ResponseEntity.status(HttpStatus.OK).body(usuarioResponse);
 
-			} catch (NoSuchElementException | InvalidDataAccessApiUsageException | DataIntegrityViolationException c) {
-				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.interno"),
-						env.getProperty("mensaje.error.interno"), env.getProperty("mensaje.campo.interno")));
-				result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MensajesResponse(mensaje));
-			}
+            } catch (NoSuchElementException | InvalidDataAccessApiUsageException | DataIntegrityViolationException c) {
+                mensaje.add(new MensajeResponse(env.getProperty("codigo.error.interno"),
+                        env.getProperty("mensaje.error.interno"), env.getProperty("mensaje.campo.interno")));
+                result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MensajesResponse(mensaje));
+            }
 
-		} else {
+        } else {
 
-			mensaje.add(new MensajeResponse(env.getProperty("codigo.error.dato"), env.getProperty("mensaje.error.mail.no.exit"),
-					env.getProperty("mensaje.campo.mail.no.exit")));
-			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
+            mensaje.add(new MensajeResponse(env.getProperty("codigo.error.dato"), env.getProperty("mensaje.error.mail.no.exit"),
+                    env.getProperty("mensaje.campo.mail.no.exit")));
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
 
-		}
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	@PostMapping("/login")
-	public ResponseEntity<?> login(@Valid @RequestBody LoginUsuarioDto loginUsuario, BindingResult bindingResult) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginUsuarioDto loginUsuario, BindingResult bindingResult) {
 
-		ResponseEntity<?> result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		List<MensajeResponse> mensaje = new ArrayList<>();
-		if (bindingResult.hasErrors()) {
+        ResponseEntity<?> result = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        List<MensajeResponse> mensaje = new ArrayList<>();
+        if (bindingResult.hasErrors()) {
 
-			bindingResult.getAllErrors().forEach((error) -> {
-				FieldError fieldError = (FieldError) error;
-				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.campo"), fieldError.getDefaultMessage(),
-						fieldError.getField()));
-			});
-			result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
+            bindingResult.getAllErrors().forEach((error) -> {
+                FieldError fieldError = (FieldError) error;
+                mensaje.add(new MensajeResponse(env.getProperty("codigo.error.campo"), fieldError.getDefaultMessage(),
+                        fieldError.getField()));
+            });
+            result = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensajesResponse(mensaje));
 
-		} else {
-			try {
-				Authentication authentication = authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(loginUsuario.getEmail(), loginUsuario.getPassword()));
+        } else {
+            try {
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(loginUsuario.getEmail(), loginUsuario.getPassword()));
 
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-				String jwt = jwtProvider.generateToken(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwt = jwtProvider.generateToken(authentication);
 
-				UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-				JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
 
-				Usuario userUpdate = usuarioService.getByEmail(loginUsuario.getEmail()).get();
-				userUpdate.setLast_login(Instant.now());
-				usuarioService.save(userUpdate);
+                Usuario userUpdate = usuarioService.getByEmail(loginUsuario.getEmail()).get();
+                userUpdate.setLast_login(Instant.now());
+                usuarioService.save(userUpdate);
 
-				result = ResponseEntity.status(HttpStatus.OK).body(jwtDto);
+                result = ResponseEntity.status(HttpStatus.OK).body(jwtDto);
 
-			} catch (AuthenticationException e) {
-				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.auth"),
-						env.getProperty("mensaje.error.auth"), env.getProperty("mensaje.campo.auth")));
-				result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MensajesResponse(mensaje));
-			} catch (NoSuchElementException | InvalidDataAccessApiUsageException c) {
-				mensaje.add(new MensajeResponse(env.getProperty("codigo.error.interno"),
-						env.getProperty("mensaje.error.interno"), env.getProperty("mensaje.campo.interno")));
-				result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MensajesResponse(mensaje));
-			}
+            } catch (AuthenticationException e) {
+                mensaje.add(new MensajeResponse(env.getProperty("codigo.error.auth"),
+                        env.getProperty("mensaje.error.auth"), env.getProperty("mensaje.campo.auth")));
+                result = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MensajesResponse(mensaje));
+            } catch (NoSuchElementException | InvalidDataAccessApiUsageException c) {
+                mensaje.add(new MensajeResponse(env.getProperty("codigo.error.interno"),
+                        env.getProperty("mensaje.error.interno"), env.getProperty("mensaje.campo.interno")));
+                result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MensajesResponse(mensaje));
+            }
 
-		}
+        }
 
-		return result;
-	}
-	
-	
+        return result;
+    }
 
-		@GetMapping("/lista")
-	    public ResponseEntity<List<UsuarioListaResponse>> list(){
-		 List<UsuarioListaResponse> usuarios = new ArrayList<>();
-		 usuarioService.list().forEach(dato ->{ usuarios.add(UsuarioMapper.INSTANCE.mapListaToDto(dato));});
-         return ResponseEntity.status(HttpStatus.OK).body(usuarios);
-	    }
+
+    @GetMapping("/lista")
+    public ResponseEntity<List<UsuarioListaResponse>> list() {
+        List<UsuarioListaResponse> usuarios = new ArrayList<>();
+        usuarioService.list().forEach(dato -> {
+            usuarios.add(UsuarioMapper.INSTANCE.mapListaToDto(dato));
+        });
+        return ResponseEntity.status(HttpStatus.OK).body(usuarios);
+    }
 
 }
