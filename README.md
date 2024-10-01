@@ -8,7 +8,7 @@ Diagrama de la solución
 https://github.com/sntramirez/spring-boot-integracion-BCI/blob/main/src/main/resources/static/documentos/diagrama.pdf
 
 # Screenshots configuraciones iniciales
-1. Ingresamos a la consola de la base de datos H2
+1. Ingresamos a la consola de la base de datos H2 
 ![View Post Page](https://github.com/sntramirez/spring-boot-integracion-BCI/blob/main/src/main/resources/static/images/consoleH2.jpg)
 
 2. Copiamos script de la ubicación
